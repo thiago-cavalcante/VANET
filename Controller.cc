@@ -1,5 +1,5 @@
 /* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/*
+/*OLA
  * Copyright (c) 2005-2009 Old Dominion University [ARBABI]
  *
  * This program is free software; you can redistribute it and/or modify
@@ -50,7 +50,8 @@ namespace ns3
   bool Controller::InitVehicle(Ptr<Street> street, int& VID)
   {
       // Block the road with warning, 500 meters away, at the right most lane [lane=0, dir=1]
-      Ptr<Obstacle> obstacle=CreateObject<Obstacle>();
+      /*
+	  Ptr<Obstacle> obstacle=CreateObject<Obstacle>();
       obstacle->SetupWifi(street->GetWifiHelper(), street->GetYansWifiPhyHelper(), street->GetNqosWifiMacHelper());
       obstacle->SetVehicleId(VID++);
       obstacle->SetDirection(1);
@@ -61,13 +62,14 @@ namespace ns3
       obstacle->SetReceiveCallback(street->GetReceiveDataCallback());
       street->AddVehicle(obstacle);
       Simulator::Schedule(Seconds(0.0), &Controller::BroadcastWarning, this, obstacle);
-      		
+      */
       // Create a police car moving toward the blocked spot, remember its VehicleId will be 2 
       // We also show how we can assign this car new wifiphy instead of using default street wifi,
       // for example a police with a stronger transmission.
       // Remember all the vehicles must use the same shared wifi channel which already hold by street.
       // Street TxPower default value is 21.0 for (250m-300m) range, 30.0 makes the police has higher range.
       // Also let police car has a higher max speed.
+      /*
       YansWifiPhyHelper policePhyHelper = YansWifiPhyHelper::Default();
       policePhyHelper.SetChannel(street->GetWifiChannel());
       policePhyHelper.Set("TxPowerStart",DoubleValue(30.0));
@@ -90,7 +92,7 @@ namespace ns3
       police->SetReceiveCallback(street->GetReceiveDataCallback());
       street->AddVehicle(police);
 	   
-      street->SetAutoInject(true);
+      street->SetAutoInject(true);*/
 
       // Return true: a signal to street that the lane lists (queues) in where obstacles and vehicles are being added
       // must be sorted based on their positions.
@@ -134,7 +136,7 @@ namespace ns3
     }
 
     // to decelerate and stop the police car reaching the obstacle 
-    if(vehicle->GetVehicleId()==2 && vehicle->GetPosition().x >=400)
+    if(/*vehicle->GetVehicleId()==2 &&*/ vehicle->GetPosition().x >=400)
     {
       vehicle->SetAcceleration(-2.0);
       // return true: a signal to street that we aim to manually control the vechile
@@ -191,4 +193,25 @@ namespace ns3
       veh->SendTo(address, packet);
     }
   }
+
+  //New function
+  void Controller::CollisionDetection(Ptr<Vehicle> MainStreetVehicle , Ptr<Vehicle> SecondaryStreetVehicle,Ptr<Street> MainStreet){
+	  /*
+	  ** usando uma rua primaria de 200 metros e uma
+	  ** rua secundaria com 50 metros de comprimento
+	  ** se o veiculo da rua principal estiver no cruzamento(100m) e o veiculo da secundaria estiver 5 m
+	  ** antes do cruzamento, o veiculo da secudaria deve desacelerar pois o veiculo da rua princial tem
+	  ** preferencia
+	  */
+	  if (MainStreetVehicle->GetPosition().y == 100 && SecondaryStreetVehicle->GetPosition().x == 45){
+		  SecondaryStreetVehicle->SetAcceleration(-2.0);
+	  }else if (MainStreetVehicle == null){//a rua principal está livre de carros
+		  SecondaryStreetVehicle->SetStreet(1); // o carro está trocando da rua 2 para a rua 1
+		  SecondaryStreetVehicle->SetLane(1);// o carro está trocando da faixa 1(rua 2) para a faixa 2 (rua 1)
+		  //lane 1 está no range 0
+		  //lane 2 está no range 1
+	  }
+	  return false;
+  }
 }
+

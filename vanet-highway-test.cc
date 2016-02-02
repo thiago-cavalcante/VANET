@@ -158,45 +158,93 @@ int main (int argc, char *argv[])
 	  RV1 = UniformVariable(flow1*deltaT, (flow1+std1)*deltaT);
 	  RV2 = UniformVariable(flow2*deltaT, (flow2+std2)*deltaT);
   }
-
-  Ptr<Street> street=CreateObject<Street>();
+  //alterei para duas ruas , antes só havia uma
+  //esta rua tem 200 metros
+  Ptr<Street> MainStreet=CreateObject<Street>();
+  //esta rua tem 50 metros
+  Ptr<Street> SecondaryStreet=CreateObject<Street>();
   Ptr<Controller> controller=CreateObject<Controller>();
 
   // Bind an experiment (controller) to street
-  controller->SetStreet(street);
+  //controller->SetStreet(street);
+  controller->SetStreet(MainStreet);
+  controller->SetStreet(SecondaryStreet);
   controller->Plot=plot;
+  // Setup parameters for Main street (esta rua representa a nossa horizontal)
+	MainStreet->SetStreetLength(200);
+	MainStreet->SetLaneWidth(5);
+	MainStreet->SetNumberOfLanes(2); 	//Mainstreet->SetNumberOfLanes(numberOfLanes);
+	//MainStreet->SetChangeLane(laneChange); //THIAGO RETIRE ESTA FUNCAO NO STREET
+	MainStreet->SetTwoDirectional(twoDirectional);
+	MainStreet->SetMedianGap(5);
+	MainStreet->SetInjectionGap(gap);
+	MainStreet->SetInjectionMixValue(mix);
+	MainStreet->SetAutoInject(true);
+	MainStreet->SetSpeedRV(RVSpeed);
+	//na verdade as duas faixas terao a mesma direcao do fluxo
+	MainStreet->SetFlowPositiveDirection(flow1);
+	MainStreet->SetVelocityPositiveDirection(vel1);
+	//na verdade as duas faixas terao a mesma direcao do fluxo
+	MainStreet->SetFlowNegativeDirection(flow2);
+	MainStreet->SetVelocityNegativeDirection(vel2);
+	MainStreet->SetFlowRVPositiveDirection(RV1);
+	MainStreet->SetFlowRVNegativeDirection(RV2);
+	MainStreet->SetPenetrationRate(pRate);
+	MainStreet->SetDeltaT(deltaT);
+	// Setup parameters for Main street (esta rua representa a nossa horizontal)
+	SecondaryStreet->SetStreetLength(50);
+	SecondaryStreet->SetLaneWidth(5);
+	SecondaryStreet->SetNumberOfLanes(1); 	//Mainstreet->SetNumberOfLanes(numberOfLanes);
+	//SecondaryStreet->SetChangeLane(laneChange);
+	//SecondaryStreet->SetTwoDirectional(twoDirectional);
+	SecondaryStreet->SetMedianGap(5);
+	SecondaryStreet->SetInjectionGap(gap);
+	SecondaryStreet->SetInjectionMixValue(mix);
+	SecondaryStreet->SetAutoInject(true);
+	SecondaryStreet->SetSpeedRV(RVSpeed);
+	//na verdade as duas faixas terao a mesma direcao do fluxo
+	SecondaryStreet->SetFlowPositiveDirection(flow1);
+	SecondaryStreet->SetVelocityPositiveDirection(vel1);
+	SecondaryStreet->SetFlowRVPositiveDirection(RV1);
+	SecondaryStreet->SetPenetrationRate(pRate);
+	SecondaryStreet->SetDeltaT(deltaT);
 
-  // Setup parameters for street
-  street->SetStreetLength(10000);
-  street->SetLaneWidth(5);
-  street->SetNumberOfLanes(numberOfLanes);
-  street->SetChangeLane(laneChange);
-  street->SetTwoDirectional(twoDirectional);
-  street->SetMedianGap(5);
-  street->SetInjectionGap(gap);
-  street->SetInjectionMixValue(mix);
-  street->SetAutoInject(true);
-  street->SetSpeedRV(RVSpeed);
-  street->SetFlowPositiveDirection(flow1);
-  street->SetVelocityPositiveDirection(vel1);
-  street->SetFlowNegativeDirection(flow2);
-  street->SetVelocityNegativeDirection(vel2);
-  street->SetFlowRVPositiveDirection(RV1);
-  street->SetFlowRVNegativeDirection(RV2);
-  street->SetPenetrationRate(pRate);
-  street->SetDeltaT(deltaT);
+/*
+//  // Setup parameters for street
+//  street->SetStreetLength(10000);
+//  street->SetLaneWidth(5);
+//  street->SetNumberOfLanes(numberOfLanes);
+//  street->SetChangeLane(laneChange);
+//  street->SetTwoDirectional(twoDirectional);
+//  street->SetMedianGap(5);
+//  street->SetInjectionGap(gap);
+//  street->SetInjectionMixValue(mix);
+//  street->SetAutoInject(true);
+//  street->SetSpeedRV(RVSpeed);
+//  street->SetFlowPositiveDirection(flow1);
+//  street->SetVelocityPositiveDirection(vel1);
+//  street->SetFlowNegativeDirection(flow2);
+//  street->SetVelocityNegativeDirection(vel2);
+//  street->SetFlowRVPositiveDirection(RV1);
+//  street->SetFlowRVNegativeDirection(RV2);
+//  street->SetPenetrationRate(pRate);
+//  street->SetDeltaT(deltaT);
+*/
   
   // Update the transmission range of wifi shared in the Street.
   YansWifiPhyHelper tempHelper = street->GetYansWifiPhyHelper();
   tempHelper.Set("TxPowerStart",DoubleValue(transmissionPower)); // 250-300 meter transmission range 
   tempHelper.Set("TxPowerEnd",DoubleValue(transmissionPower));   // 250-300 meter transmission range 
-  street->SetYansWifiPhyHelper(tempHelper);
+  /*street->SetYansWifiPhyHelper(tempHelper);
   
   // Bind the Street/Vehicle events to the event handlers. Controller's will catch them.
   street->SetControlVehicleCallback(MakeCallback(&Controller::ControlVehicle,controller));
   street->SetInitVehicleCallback(MakeCallback(&Controller::InitVehicle,controller));
   street->SetReceiveDataCallback(MakeCallback(&Controller::ReceiveData,controller));
-  
+  */
+  //^
+  //|
+  //Esta parte eu tenho que alterar, para colocar pras duas ruas
   // Setup seed and run-number (to affect random variable outcome of different runs)
   if(runNumber < 1) runNumber=1;
   SeedManager::SetSeed(1);
@@ -227,3 +275,4 @@ int main (int argc, char *argv[])
 
   return 0;
 }
+

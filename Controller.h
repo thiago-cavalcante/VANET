@@ -23,6 +23,7 @@
 
 #include "Street.h"
 #include "Obstacle.h"
+//#include "Vehicle.h"
 
 using namespace ns3;
 using namespace std;
@@ -63,3 +64,4 @@ namespace ns3
   };
 }
 #endif
+

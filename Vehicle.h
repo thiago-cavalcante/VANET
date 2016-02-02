@@ -17,7 +17,8 @@
  *
  * Author: Hadi Arbabi <marbabi@cs.odu.edu>
  */
-
+// eu comentei os parametros de length e width do carro
+// nao vamos precisar agora
 #ifndef CLASS_VEHICLE_
 #define CLASS_VEHICLE_
 
@@ -71,8 +72,8 @@ namespace ns3
 	  double m_CrossingTime;        // time to access the crossing area.
       int m_lane;                   // vehicle's lane.
       int m_street;					// vehicle's street.
-      double m_length;              // vehicle's length.
-      double m_width;               // vehicle's width.
+      //double m_length;              // vehicle's length.
+      //double m_width;               // vehicle's width.
       double m_acceleration;        // vehicle's acceleration.
       Ptr<Model> m_model;           // vehicle's IDM mobility model.
       Ptr<Node> m_node;             // vehicle has a node
@@ -146,19 +147,19 @@ namespace ns3
       /**
       * \returns the length of the Vehicle.
       */
-      double GetLength();
+      //double GetLength();
       /**
       * \param value the length of the Vehicle. 
       */
-      void SetLength(double value);
+      //void SetLength(double value);
       /**
       * \returns the width of the Vehicle.
       */
-      double GetWidth();
+      //double GetWidth();
       /**
       * \param value the width of the Vehicle.
       */
-      void SetWidth(double value);
+      //void SetWidth(double value);
       /**
       * \returns the current velocity (speed) of the Vehicle.
       */
@@ -183,6 +184,10 @@ namespace ns3
       * \param value the lane number to which the Vehicle must belong.
       */
       void SetLane(int value);
+
+      int GetStreet();
+
+      void SetStreet(int value);
 
       /**
       * \param vwd the Vehicle in front.
@@ -216,7 +221,7 @@ namespace ns3
       * \param toLeft the inclination for the target lane. True: target lane is left, False: target lane is right.
       * \returns true if the change of the lane is possible for the Vehicle.
       */
-      virtual bool CheckLaneChange(Ptr<Vehicle> frontOld, Ptr<Vehicle> frontNew, Ptr<Vehicle> backNew, bool toLeft);
+      //virtual bool CheckLaneChange(Ptr<Vehicle> frontOld, Ptr<Vehicle> frontNew, Ptr<Vehicle> backNew, bool toLeft);
       /**
       * \return the Wifi address of the Vehicle.
 	  *
@@ -286,3 +291,4 @@ namespace ns3
   };
 };
 #endif
+

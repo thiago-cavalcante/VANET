@@ -38,13 +38,13 @@ namespace ns3
 	mobility.Install(m_node);
     m_vehicleId = 1;
     m_lane = 0;
-    m_direction= 0;
+    //m_direction= 0;
     m_velocity = 0.0;
     m_acceleration= 0.0;
     m_model = 0;
-    m_laneChange = 0;
-    m_length = 0;
-    m_width = 0;
+    //m_laneChange = 0;
+    //m_length = 0; tamanho do veículo
+    //m_width = 0;
 	IsEquipped=true;
 	m_CrossingTime=10;
 	m_positionX=0;
@@ -117,7 +117,7 @@ namespace ns3
     m_node->GetObject<MobilityModel>()->SetPosition(value);
   }
 
-  double Vehicle::GetLength()
+  /*double Vehicle::GetLength()
   {
     return m_length;
   }
@@ -139,7 +139,7 @@ namespace ns3
     if(value < 0)
 	  value=0;
     m_width=value;
-  }
+  }*/
 
   double Vehicle::GetVelocity()
   {
@@ -197,10 +197,10 @@ namespace ns3
       }
   }
 
-  bool Vehicle::CheckLaneChange(Ptr<Vehicle> frontOld, Ptr<Vehicle> frontNew, Ptr<Vehicle> backNew, bool toLeft)
+  /*bool Vehicle::CheckLaneChange(Ptr<Vehicle> frontOld, Ptr<Vehicle> frontNew, Ptr<Vehicle> backNew, bool toLeft)
   {
     return m_laneChange->CheckLaneChange(Ptr<Vehicle>(this), frontOld, frontNew, backNew, toLeft);
-  }
+  }*/
 
   bool Vehicle::Compare(Ptr<Vehicle> v1, Ptr<Vehicle> v2)
   {
@@ -344,3 +344,4 @@ namespace ns3
     m_phyStateTrace = phyStateTrace;
   }
 }
+
