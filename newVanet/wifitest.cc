@@ -177,7 +177,7 @@ Experiment::Run (const WifiHelper &wifi, const YansWifiPhyHelper &wifiPhy,
 
   NodeContainer c;
   c.Create (4);
-  vehicle.m_node=c.Get(0);
+
   PacketSocketHelper packetSocket;
   packetSocket.Install (c);
 
