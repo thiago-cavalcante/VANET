@@ -171,22 +171,22 @@ Experiment::Run (const WifiHelper &wifi, const YansWifiPhyHelper &wifiPhy,
   double finalPositionA = 100;
   double finalPositionB = 100;
   double finalPositionC = 100;
-//  Vehicle* v1;
-//  Vehicle* v2;
-//  Vehicle* v3;
-//  Vehicle* v4;
-  Ptr<Vehicle> v1 = CreateObject<Vehicle> ();
-  Ptr<Vehicle> v2 = CreateObject<Vehicle> ();
-  Ptr<Vehicle> v3 = CreateObject<Vehicle> ();
-  Ptr<Vehicle> v4 = CreateObject<Vehicle> ();
+  Vehicle* v1;
+  Vehicle* v2;
+  Vehicle* v3;
+  Vehicle* v4;
+//  Ptr<Vehicle> v1 = CreateObject<Vehicle> ();
+//  Ptr<Vehicle> v2 = CreateObject<Vehicle> ();
+//  Ptr<Vehicle> v3 = CreateObject<Vehicle> ();
+//  Ptr<Vehicle> v4 = CreateObject<Vehicle> ();
 
 
   m_bytesTotal = 0;
 
-//  v1=new Vehicle();
-//  v2=new Vehicle();
-//  v3=new Vehicle();
-//  v4=new Vehicle();
+  v1=new Vehicle();
+  v2=new Vehicle();
+  v3=new Vehicle();
+  v4=new Vehicle();
 
   NodeContainer c;
   c.Add(v1->getNode());
