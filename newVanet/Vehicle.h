@@ -64,17 +64,18 @@ namespace ns3
       */
       void SetVehicleId(int value);
 
-      /**
-      * \returns the position of Vehicle's Node which is located at the center back of the Vehicle.
-      */
-      Vector GetPosition();
-      /**
-      * \param value a position Vector.
-	  *
-	  * This function sets the position of Vehicle's Node. Vehicle's position is its Node's position.
-	  * This position Vector must point to the center back of the Vehicle.
-      */
-      void SetPosition(Vector value);
+//      /**
+//      * \returns the position of Vehicle's Node which is located at the center back of the Vehicle.
+//      */
+//      Vector GetPosition();
+//      /**
+//      * \param value a position Vector.
+//	  *
+//	  * This function sets the position of Vehicle's Node. Vehicle's position is its Node's position.
+//	  * This position Vector must point to the center back of the Vehicle.
+//      */
+//      void SetPosition(Vector value);
+
       /**
       * \returns the current velocity (speed) of the Vehicle.
       */
@@ -84,7 +85,26 @@ namespace ns3
       */
       void SetVelocity(double value);
 
-  };
+      double getCrossingTime() const;
+
+      void setCrossingTime(double crossingTime);
+
+      Ptr<Node> getNode();
+
+      void setNode(Ptr<Node> node);
+
+      double getPositionX();
+
+      void setPositionX(double positionX);
+
+      double getPositionY();
+
+      void setPositionY(double positionY);
+
+      int getStreet();
+
+      void setStreet(int street);
+
+};
 };
 #endif
-

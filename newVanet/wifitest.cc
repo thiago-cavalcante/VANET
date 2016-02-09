@@ -171,9 +171,17 @@ Experiment::Run (const WifiHelper &wifi, const YansWifiPhyHelper &wifiPhy,
   double finalPositionA = 100;
   double finalPositionB = 100;
   double finalPositionC = 100;
-  Ptr<Vehicle> vehicle;
+//  Vehicle* v1;
+//  Vehicle* v2;
+//  Vehicle* v3;
+//  Vehicle* v4;
 
   m_bytesTotal = 0;
+
+//  v1=new Vehicle();
+//  v2=new Vehicle();
+//  v3=new Vehicle();
+//  v4=new Vehicle();
 
   NodeContainer c;
   c.Create (4);
@@ -216,6 +224,16 @@ Experiment::Run (const WifiHelper &wifi, const YansWifiPhyHelper &wifiPhy,
   Simulator::Schedule (Seconds (3.0), &Experiment::AdvancePositionX, this, c.Get (0), &velB, finalPositionB);
   Simulator::Schedule (Seconds (0.0), &Experiment::AdvancePositionY, this, c.Get (3), &velC, finalPositionC);
   Ptr<Socket> recvSink = SetupPacketReceive (c.Get (2));
+
+//  v1->getNode() = c.Get (0);
+//  v2->getNode() = c.Get (1);
+//  v3->getNode() = c.Get (2);
+//  v4->getNode() = c.Get (3);
+
+//  Simulator::Schedule (Seconds (0.0), &Experiment::AdvancePositionX, this, v2->getNode(), &velA, finalPositionA);
+//  Simulator::Schedule (Seconds (3.0), &Experiment::AdvancePositionX, this, v1->getNode(), &velB, finalPositionB);
+//  Simulator::Schedule (Seconds (0.0), &Experiment::AdvancePositionY, this, v4->getNode(), &velC, finalPositionC);
+//  Ptr<Socket> recvSink = SetupPacketReceive (v3->getNode());
 
 
 

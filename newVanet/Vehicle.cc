@@ -33,7 +33,7 @@ namespace ns3
 
   Vehicle::Vehicle()
   {
-    m_node=CreateObject<Node>();
+    m_node=CreateObject<ns3::Node>();
     m_vehicleId = 1;
     m_velocity = 0.0;
 	m_CrossingTime=10;
@@ -75,5 +75,45 @@ namespace ns3
   {
     m_velocity=value;
   }
-}
 
+	double Vehicle::getCrossingTime() const {
+		return m_CrossingTime;
+	}
+
+	void Vehicle::setCrossingTime(double crossingTime) {
+		m_CrossingTime = crossingTime;
+	}
+
+	Ptr<Node> Vehicle::getNode(){
+		return m_node;
+	}
+
+	void Vehicle::setNode(Ptr<Node> node) {
+		m_node = node;
+	}
+
+	double Vehicle::getPositionX() {
+		return m_positionX;
+	}
+
+	void Vehicle::setPositionX(double positionX) {
+		m_positionX = positionX;
+	}
+
+	double Vehicle::getPositionY(){
+		return m_positionY;
+	}
+
+	void Vehicle::setPositionY(double positionY) {
+		m_positionY = positionY;
+	}
+
+	int Vehicle::getStreet(){
+		return m_street;
+	}
+
+	void Vehicle::setStreet(int street) {
+		m_street = street;
+	}
+
+}
