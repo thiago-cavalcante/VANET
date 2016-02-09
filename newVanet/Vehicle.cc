@@ -33,7 +33,7 @@ namespace ns3
 
   Vehicle::Vehicle()
   {
-    m_node=CreateObject<ns3::Node>();
+    m_node=CreateObject<Node>();
     m_vehicleId = 1;
     m_velocity = 0.0;
 	m_CrossingTime=10;

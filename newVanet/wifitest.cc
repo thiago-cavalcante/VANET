@@ -189,7 +189,10 @@ Experiment::Run (const WifiHelper &wifi, const YansWifiPhyHelper &wifiPhy,
 //  v4=new Vehicle();
 
   NodeContainer c;
-  c.Create (4);
+  c.Add(v1->getNode());
+  c.Add(v2->getNode());
+  c.Add(v3->getNode());
+  c.Add(v4->getNode());
 
   PacketSocketHelper packetSocket;
   packetSocket.Install (c);
@@ -225,20 +228,20 @@ Experiment::Run (const WifiHelper &wifi, const YansWifiPhyHelper &wifiPhy,
   apps.Stop (Seconds (500.0));
 
 
-//  Simulator::Schedule (Seconds (0.0), &Experiment::AdvancePositionX, this, c.Get (1), &velA, finalPositionA);
-//  Simulator::Schedule (Seconds (3.0), &Experiment::AdvancePositionX, this, c.Get (0), &velB, finalPositionB);
-//  Simulator::Schedule (Seconds (0.0), &Experiment::AdvancePositionY, this, c.Get (3), &velC, finalPositionC);
-//  Ptr<Socket> recvSink = SetupPacketReceive (c.Get (2));
+  Simulator::Schedule (Seconds (0.0), &Experiment::AdvancePositionX, this, c.Get (1), &velA, finalPositionA);
+  Simulator::Schedule (Seconds (3.0), &Experiment::AdvancePositionX, this, c.Get (0), &velB, finalPositionB);
+  Simulator::Schedule (Seconds (0.0), &Experiment::AdvancePositionY, this, c.Get (3), &velC, finalPositionC);
+  Ptr<Socket> recvSink = SetupPacketReceive (c.Get (2));
 
-  v1->getNode() = c.Get (0);
-  v2->getNode() = c.Get (1);
-  v3->getNode() = c.Get (2);
-  v4->getNode() = c.Get (3);
+//  v1->getNode() = c.Get (0);
+//  v2->getNode() = c.Get (1);
+//  v3->getNode() = c.Get (2);
+//  v4->getNode() = c.Get (3);
 
-  Simulator::Schedule (Seconds (0.0), &Experiment::AdvancePositionX, this, v2->getNode(), &velA, finalPositionA);
-  Simulator::Schedule (Seconds (3.0), &Experiment::AdvancePositionX, this, v1->getNode(), &velB, finalPositionB);
-  Simulator::Schedule (Seconds (0.0), &Experiment::AdvancePositionY, this, v4->getNode(), &velC, finalPositionC);
-  Ptr<Socket> recvSink = SetupPacketReceive (v3->getNode());
+//  Simulator::Schedule (Seconds (0.0), &Experiment::AdvancePositionX, this, v2->getNode(), &velA, finalPositionA);
+//  Simulator::Schedule (Seconds (3.0), &Experiment::AdvancePositionX, this, v1->getNode(), &velB, finalPositionB);
+//  Simulator::Schedule (Seconds (0.0), &Experiment::AdvancePositionY, this, v4->getNode(), &velC, finalPositionC);
+//  Ptr<Socket> recvSink = SetupPacketReceive (v3->getNode());
 
 
 
