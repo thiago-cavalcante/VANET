@@ -30,11 +30,11 @@ public:
                         const NqosWifiMacHelper &wifiMac, const YansWifiChannelHelper &wifiChannel);
 private:
   void ReceivePacket (Ptr<Socket> socket);
-  void SetPosition (Ptr<Node> node, Vector position);
-  Vector GetPosition (Ptr<Node> node);
-  void AdvancePositionX (Ptr<Node> node, double* vel, double finalPosition);
-  void AdvancePositionY (Ptr<Node> node, double* vel, double finalPosition);
-  Ptr<Socket> SetupPacketReceive (Ptr<Node> node);
+  void SetPosition (Vehicle* v, Vector position);
+  Vector GetPosition (Vehicle* v);
+  void AdvancePositionX (Vehicle* v, double* vel, double finalPosition);
+  void AdvancePositionY (Vehicle* v, double* vel, double finalPosition);
+  Ptr<Socket> SetupPacketReceive (Vehicle* v);
 
   uint32_t m_bytesTotal;
   Gnuplot2dDataset m_output;
@@ -58,21 +58,21 @@ Experiment::Experiment (std::string name)
 //}
 
 void
-Experiment::SetPosition (Ptr<Node> node, Vector position)
+Experiment::SetPosition (Vehicle* v, Vector position)
 {
-  Ptr<MobilityModel> mobility = node->GetObject<MobilityModel> ();
+  Ptr<MobilityModel> mobility = v->getNode()->GetObject<MobilityModel> ();
   mobility->SetPosition (position);
 }
 
 Vector
-Experiment::GetPosition (Ptr<Node> node)
+Experiment::GetPosition (Vehicle* v)
 {
-  Ptr<MobilityModel> mobility = node->GetObject<MobilityModel> ();
+  Ptr<MobilityModel> mobility = v->getNode()->GetObject<MobilityModel> ();
   return mobility->GetPosition ();
 }
 
 void
-Experiment::AdvancePositionX (Ptr<Node> node, double* vel, double finalPosition)
+Experiment::AdvancePositionX (Vehicle* v, double* vel, double finalPosition)
 {
   //speed in kph
   double speed=*vel;
@@ -81,7 +81,7 @@ Experiment::AdvancePositionX (Ptr<Node> node, double* vel, double finalPosition)
   //advance position in meters
   double advance = 0.1;
   //time = advance/(speedA/3.6);
-  Vector pos = GetPosition (node);
+  Vector pos = GetPosition (v);
 //  Ptr<MobilityModel> mobility = node->GetObject<MobilityModel> ();
 //  ns3::Ptr<const ns3::MobilityModel> p = pos;
 //  double d = mobility->GetDistanceFrom(p);
@@ -94,17 +94,17 @@ Experiment::AdvancePositionX (Ptr<Node> node, double* vel, double finalPosition)
 	  time = advance/(speed/3.6);
   if (pos.x >= finalPosition)
     {
-	  SetPosition (node, Vector(384e6, 384e6, 384e6));
+	  SetPosition (v, Vector(384e6, 384e6, 384e6));
       return;
     }
-  SetPosition (node, pos);
+  SetPosition (v, pos);
   //std::cout << "x="<<pos.x << std::endl;
-  Simulator::Schedule (Seconds (time), &Experiment::AdvancePositionX, this, node,vel,finalPosition);
+  Simulator::Schedule (Seconds (time), &Experiment::AdvancePositionX, this, v,vel,finalPosition);
 }
 
 
 void
-Experiment::AdvancePositionY (Ptr<Node> node, double* vel, double finalPosition)
+Experiment::AdvancePositionY (Vehicle* v, double* vel, double finalPosition)
 {
   //speed in kph
   double speed=*vel;
@@ -113,7 +113,7 @@ Experiment::AdvancePositionY (Ptr<Node> node, double* vel, double finalPosition)
   //advance position in meters
   double advance = 0.1;
   time = advance/(speed/3.6);
-  Vector pos = GetPosition (node);
+  Vector pos = GetPosition (v);
   double mbs = ((m_bytesTotal * 8.0) / 1000000);
   m_bytesTotal = 0;
   m_output.Add (pos.y, mbs);
@@ -127,15 +127,15 @@ Experiment::AdvancePositionY (Ptr<Node> node, double* vel, double finalPosition)
 	  time = advance/(speed/3.6);
 	  if (pos.x >= finalPosition)
 	      {
-		    SetPosition (node, Vector(384e6, 384e6, 384e6));
+		    SetPosition (v, Vector(384e6, 384e6, 384e6));
 	        return;
 	      }
 	  //SetPosition (node, pos);
 	  //return;
     }
-  SetPosition (node, pos);
+  SetPosition (v, pos);
   //std::cout << "x="<<pos.x << std::endl;
-  Simulator::Schedule (Seconds (time), &Experiment::AdvancePositionY, this, node,vel,finalPosition);
+  Simulator::Schedule (Seconds (time), &Experiment::AdvancePositionY, this, v,vel,finalPosition);
 }
 
 void
@@ -149,10 +149,10 @@ Experiment::ReceivePacket (Ptr<Socket> socket)
 }
 
 Ptr<Socket>
-Experiment::SetupPacketReceive (Ptr<Node> node)
+Experiment::SetupPacketReceive (Vehicle* v)
 {
   TypeId tid = TypeId::LookupByName ("ns3::PacketSocketFactory");
-  Ptr<Socket> sink = Socket::CreateSocket (node, tid);
+  Ptr<Socket> sink = Socket::CreateSocket (v->getNode(), tid);
   sink->Bind ();
   sink->SetRecvCallback (MakeCallback (&Experiment::ReceivePacket, this));
   return sink;
@@ -173,10 +173,6 @@ Experiment::Run (const WifiHelper &wifi, const YansWifiPhyHelper &wifiPhy,
   Vehicle* v2 = new Vehicle(velB, Vector (10.0, 0.0, 0.0));
   Vehicle* v3 = new Vehicle(0, Vector (50.0, -10.0, 0.0));
   Vehicle* v4 = new Vehicle(velC, Vector (50.0, 100.0, 0.0));
-//  Ptr<Vehicle> v1 = CreateObject<Vehicle> ();
-//  Ptr<Vehicle> v2 = CreateObject<Vehicle> ();
-//  Ptr<Vehicle> v3 = CreateObject<Vehicle> ();
-//  Ptr<Vehicle> v4 = CreateObject<Vehicle> ();
 
   m_bytesTotal = 0;
 
@@ -198,10 +194,6 @@ Experiment::Run (const WifiHelper &wifi, const YansWifiPhyHelper &wifiPhy,
 
   MobilityHelper mobility;
   Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
-//  positionAlloc->Add (Vector (0.0, 0.0, 0.0));
-//  positionAlloc->Add (Vector (10.0, 0.0, 0.0));
-//  positionAlloc->Add (Vector (50.0, -10.0, 0.0));
-//  positionAlloc->Add (Vector (50.0, 100.0, 0.0));
   positionAlloc->Add (v1->GetInitialPosition());
   positionAlloc->Add (v2->GetInitialPosition());
   positionAlloc->Add (v3->GetInitialPosition());
@@ -226,21 +218,10 @@ Experiment::Run (const WifiHelper &wifi, const YansWifiPhyHelper &wifiPhy,
   apps.Stop (Seconds (500.0));
 
 
-  Simulator::Schedule (Seconds (0.0), &Experiment::AdvancePositionX, this, v2->getNode(), &velA, finalPositionA);
-  Simulator::Schedule (Seconds (3.0), &Experiment::AdvancePositionX, this, v1->getNode(), &velB, finalPositionB);
-  Simulator::Schedule (Seconds (0.0), &Experiment::AdvancePositionY, this, v4->getNode(), &velC, finalPositionC);
-  Ptr<Socket> recvSink = SetupPacketReceive (v3->getNode());
-
-//  v1->getNode() = c.Get (0);
-//  v2->getNode() = c.Get (1);
-//  v3->getNode() = c.Get (2);
-//  v4->getNode() = c.Get (3);
-
-//  Simulator::Schedule (Seconds (0.0), &Experiment::AdvancePositionX, this, v2->getNode(), &velA, finalPositionA);
-//  Simulator::Schedule (Seconds (3.0), &Experiment::AdvancePositionX, this, v1->getNode(), &velB, finalPositionB);
-//  Simulator::Schedule (Seconds (0.0), &Experiment::AdvancePositionY, this, v4->getNode(), &velC, finalPositionC);
-//  Ptr<Socket> recvSink = SetupPacketReceive (v3->getNode());
-
+  Simulator::Schedule (Seconds (0.0), &Experiment::AdvancePositionX, this, v2, &velA, finalPositionA);
+  Simulator::Schedule (Seconds (3.0), &Experiment::AdvancePositionX, this, v1, &velB, finalPositionB);
+  Simulator::Schedule (Seconds (0.0), &Experiment::AdvancePositionY, this, v4, &velC, finalPositionC);
+  Ptr<Socket> recvSink = SetupPacketReceive (v3);
 
 
   Simulator::Run ();
