@@ -38,11 +38,10 @@ namespace ns3
     	
 	  int m_vehicleId;              // vehicle's id
 	  double m_velocity;            // vehicle's velocity.
-	  double m_positionX;			// X coordinate for the vehicle.
-	  double m_positionY;		    // Y coordinate for the vehicle.
 	  double m_CrossingTime;        // time to access the crossing area.
       int m_street;					// vehicle's street.
       Ptr<Node> m_node;             // vehicle has a node
+      Vector m_initialPosition;		// vehicle's initial position.
 
     public:
 
@@ -50,6 +49,7 @@ namespace ns3
       static TypeId GetTypeId (void);
       /// Constructor to initialize values of all variables to zero except VehicleId to one.
       Vehicle();
+      Vehicle(double vel, Vector initialPosition);
 	  /// Destructor [does nothing].
       ~Vehicle();
       /**
@@ -104,6 +104,10 @@ namespace ns3
       int getStreet();
 
       void setStreet(int street);
+
+      Vector GetInitialPosition();
+
+      void SetInitialPosition(Vector value);
 
 };
 };

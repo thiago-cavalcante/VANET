@@ -34,12 +34,21 @@ namespace ns3
   Vehicle::Vehicle()
   {
     m_node=CreateObject<Node>();
-    m_vehicleId = 1;
-    m_velocity = 0.0;
+    m_vehicleId = m_node->GetId();
+    m_velocity = 0;
 	m_CrossingTime=10;
-	m_positionX=0;
-	m_positionY=0;
 	m_street=0;
+	m_initialPosition = Vector (0.0, 0.0, 0.0);
+  }
+
+  Vehicle::Vehicle(double vel, Vector initialPosition)
+  {
+    m_node=CreateObject<Node>();
+    m_vehicleId = m_node->GetId();
+    m_velocity = vel;
+	m_CrossingTime=10;
+	m_street=0;
+	m_initialPosition=initialPosition;
   }
 
   Vehicle::~Vehicle()
@@ -92,22 +101,6 @@ namespace ns3
 		m_node = node;
 	}
 
-	double Vehicle::getPositionX() {
-		return m_positionX;
-	}
-
-	void Vehicle::setPositionX(double positionX) {
-		m_positionX = positionX;
-	}
-
-	double Vehicle::getPositionY(){
-		return m_positionY;
-	}
-
-	void Vehicle::setPositionY(double positionY) {
-		m_positionY = positionY;
-	}
-
 	int Vehicle::getStreet(){
 		return m_street;
 	}
@@ -115,5 +108,15 @@ namespace ns3
 	void Vehicle::setStreet(int street) {
 		m_street = street;
 	}
+
+	Vector Vehicle::GetInitialPosition()
+	  {
+	    return m_initialPosition;
+	  }
+
+	  void Vehicle::SetInitialPosition(Vector value)
+	  {
+	    m_node->GetObject<MobilityModel>()->SetPosition(value);
+	  }
 
 }

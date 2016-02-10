@@ -15,7 +15,9 @@
 #include "Vehicle.h"
 #include <iostream>
 
-
+double speedA = 40;
+double speedB = 60;
+double speedC = 80;
 
 using namespace ns3;
 
@@ -163,23 +165,28 @@ Experiment::Run (const WifiHelper &wifi, const YansWifiPhyHelper &wifiPhy,
                  const NqosWifiMacHelper &wifiMac, const YansWifiChannelHelper &wifiChannel)
 {
 
-  double velA = 45.0;
-  double velB = 40.0;
+  double velA = 40.0;
+  double velB = 45.0;
   double velC = 80.0;
   double finalPositionA = 100;
   double finalPositionB = 100;
   double finalPositionC = 100;
-  Vehicle* v1 = new Vehicle(velA, Vector (0.0, 0.0, 0.0));
-  Vehicle* v2 = new Vehicle(velB, Vector (10.0, 0.0, 0.0));
-  Vehicle* v3 = new Vehicle(0, Vector (50.0, -10.0, 0.0));
-  Vehicle* v4 = new Vehicle(velC, Vector (50.0, 100.0, 0.0));
+  Vehicle* v1;
+  Vehicle* v2;
+  Vehicle* v3;
+  Vehicle* v4;
 //  Ptr<Vehicle> v1 = CreateObject<Vehicle> ();
 //  Ptr<Vehicle> v2 = CreateObject<Vehicle> ();
 //  Ptr<Vehicle> v3 = CreateObject<Vehicle> ();
 //  Ptr<Vehicle> v4 = CreateObject<Vehicle> ();
 
+
   m_bytesTotal = 0;
 
+  v1=new Vehicle();
+  v2=new Vehicle();
+  v3=new Vehicle();
+  v4=new Vehicle();
 
   NodeContainer c;
   c.Add(v1->getNode());
@@ -198,15 +205,10 @@ Experiment::Run (const WifiHelper &wifi, const YansWifiPhyHelper &wifiPhy,
 
   MobilityHelper mobility;
   Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
-//  positionAlloc->Add (Vector (0.0, 0.0, 0.0));
-//  positionAlloc->Add (Vector (10.0, 0.0, 0.0));
-//  positionAlloc->Add (Vector (50.0, -10.0, 0.0));
-//  positionAlloc->Add (Vector (50.0, 100.0, 0.0));
-  positionAlloc->Add (v1->GetInitialPosition());
-  positionAlloc->Add (v2->GetInitialPosition());
-  positionAlloc->Add (v3->GetInitialPosition());
-  positionAlloc->Add (v4->GetInitialPosition());
-
+  positionAlloc->Add (Vector (0.0, 0.0, 0.0));
+  positionAlloc->Add (Vector (10.0, 0.0, 0.0));
+  positionAlloc->Add (Vector (50.0, -10.0, 0.0));
+  positionAlloc->Add (Vector (50.0, 100.0, 0.0));
   mobility.SetPositionAllocator (positionAlloc);
   mobility.SetMobilityModel ("ns3::ConstantPositionMobilityModel");
 
@@ -226,10 +228,10 @@ Experiment::Run (const WifiHelper &wifi, const YansWifiPhyHelper &wifiPhy,
   apps.Stop (Seconds (500.0));
 
 
-  Simulator::Schedule (Seconds (0.0), &Experiment::AdvancePositionX, this, v2->getNode(), &velA, finalPositionA);
-  Simulator::Schedule (Seconds (3.0), &Experiment::AdvancePositionX, this, v1->getNode(), &velB, finalPositionB);
-  Simulator::Schedule (Seconds (0.0), &Experiment::AdvancePositionY, this, v4->getNode(), &velC, finalPositionC);
-  Ptr<Socket> recvSink = SetupPacketReceive (v3->getNode());
+  Simulator::Schedule (Seconds (0.0), &Experiment::AdvancePositionX, this, c.Get (1), &velA, finalPositionA);
+  Simulator::Schedule (Seconds (3.0), &Experiment::AdvancePositionX, this, c.Get (0), &velB, finalPositionB);
+  Simulator::Schedule (Seconds (0.0), &Experiment::AdvancePositionY, this, c.Get (3), &velC, finalPositionC);
+  Ptr<Socket> recvSink = SetupPacketReceive (c.Get (2));
 
 //  v1->getNode() = c.Get (0);
 //  v2->getNode() = c.Get (1);
